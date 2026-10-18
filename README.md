@@ -96,6 +96,7 @@ Base: `http://localhost:3000`. Requisições com corpo devem enviar `Content-Typ
 | GET    | `/pedidos`            | Lista os pedidos (RF02)   | 200                                        |
 | GET    | `/pedidos/:id`        | Consulta pelo id (RF03)   | 200 · 404 inexistente                      |
 | PATCH  | `/pedidos/:id/status` | Atualiza o status (RF04)  | 200 · 400 status/transição inválidos · 404 |
+| DELETE | `/pedidos/:id`        | Exclui um pedido (extra)  | 204 excluído · 404 inexistente             |
 
 ### POST /pedidos
 
@@ -152,6 +153,16 @@ Retorna `200 OK` com o pedido atualizado. Status desconhecido ou transição nã
 { "erro": "Transição de 'em_preparacao' para 'recebido' não é permitida. Transições possíveis: enviado, cancelado." }
 ```
 
+### DELETE /pedidos/:id
+
+Rota extra, além das exigidas no enunciado. Remove o pedido e retorna `204 No Content`, sem corpo. Id inexistente (ou pedido já excluído) resulta em `404`. Os ids não são reaproveitados: depois de excluir o pedido 1, o próximo criado continua sendo o 2.
+
+```http
+DELETE /pedidos/1
+```
+
+Para encerrar um pedido mantendo o histórico, prefira o status `cancelado`; o DELETE apaga o registro.
+
 ## Regras de validação
 
 | Campo        | Regra |
@@ -206,12 +217,12 @@ routes → controllers → services → repositories
 
 Os dados ficam em memória: ao reiniciar o backend, os pedidos são apagados e os ids recomeçam em 1.
 
-**Frontend:** projeto independente em `frontend/`, servido por um servidor estático em Node sem dependências. Permite cadastrar, listar, buscar por id e alterar o status dos pedidos. Toda a validação é feita pela API; o frontend só exibe as mensagens retornadas. O backend habilita CORS para aceitar requisições dessa outra origem.
+**Frontend:** projeto independente em `frontend/`, servido por um servidor estático em Node sem dependências. Permite cadastrar, listar, buscar por id, alterar o status e excluir pedidos. Toda a validação é feita pela API; o frontend só exibe as mensagens retornadas. O backend habilita CORS para aceitar requisições dessa outra origem.
 
 ## Testes
 
-- **Automatizados:** `backend/tests/`, com Jest e Supertest (33 casos). Cobrem criação válida e inválida (cliente vazio, valor zero/negativo/texto, tipo e prioridade desconhecidos, corpo que não é objeto, JSON malformado), listagem, consulta existente e inexistente, fluxo completo de status, transições proibidas, 404 no PATCH e erro inesperado retornando 500.
-- **Manuais:** coleção do Postman em `backend/postman/API_Pedidos.postman_collection.json` (Postman → Import). São 8 requisições com testes embutidos (aba *Test Results*), que conferem o código HTTP e o corpo de cada resposta. A requisição 01 guarda o id do pedido criado na variável `{{pedidoId}}`, usada pelas seguintes. Para rodar todas de uma vez: botão direito na coleção → *Run collection*.
+- **Automatizados:** `backend/tests/`, com Jest e Supertest (37 casos). Cobrem criação válida e inválida (cliente vazio, valor zero/negativo/texto, tipo e prioridade desconhecidos, corpo que não é objeto, JSON malformado), listagem, consulta existente e inexistente, fluxo completo de status, transições proibidas, 404 no PATCH, exclusão (204, 404 e id não reaproveitado) e erro inesperado retornando 500.
+- **Manuais:** coleção do Postman em `backend/postman/API_Pedidos.postman_collection.json` (Postman → Import). São 11 requisições com testes embutidos (aba *Test Results*), que conferem o código HTTP e o corpo de cada resposta. A requisição 01 guarda o id do pedido criado na variável `{{pedidoId}}`, usada pelas seguintes. Para rodar todas de uma vez: botão direito na coleção → *Run collection*.
 
 ## Evidências
 

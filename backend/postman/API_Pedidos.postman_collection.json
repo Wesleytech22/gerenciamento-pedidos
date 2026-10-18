@@ -5,8 +5,14 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000" },
-    { "key": "pedidoId", "value": "1" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "pedidoId",
+      "value": "1"
+    }
   ],
   "item": [
     {
@@ -28,7 +34,12 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "url": "{{baseUrl}}/pedidos",
         "body": {
           "mode": "raw",
@@ -54,7 +65,12 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "url": "{{baseUrl}}/pedidos",
         "body": {
           "mode": "raw",
@@ -76,7 +92,10 @@
           }
         }
       ],
-      "request": { "method": "GET", "url": "{{baseUrl}}/pedidos" }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/pedidos"
+      }
     },
     {
       "name": "04 - Consultar pedido inexistente (404)",
@@ -92,7 +111,10 @@
           }
         }
       ],
-      "request": { "method": "GET", "url": "{{baseUrl}}/pedidos/999" }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/pedidos/999"
+      }
     },
     {
       "name": "05 - Atualizar status (200)",
@@ -110,9 +132,17 @@
       ],
       "request": {
         "method": "PATCH",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "url": "{{baseUrl}}/pedidos/{{pedidoId}}/status",
-        "body": { "mode": "raw", "raw": "{\n  \"status\": \"em_preparacao\"\n}" }
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"em_preparacao\"\n}"
+        }
       }
     },
     {
@@ -129,7 +159,10 @@
           }
         }
       ],
-      "request": { "method": "GET", "url": "{{baseUrl}}/pedidos/{{pedidoId}}" }
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/pedidos/{{pedidoId}}"
+      }
     },
     {
       "name": "07 - Transição inválida (400)",
@@ -147,9 +180,17 @@
       ],
       "request": {
         "method": "PATCH",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "url": "{{baseUrl}}/pedidos/{{pedidoId}}/status",
-        "body": { "mode": "raw", "raw": "{\n  \"status\": \"recebido\"\n}" }
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"recebido\"\n}"
+        }
       }
     },
     {
@@ -167,9 +208,71 @@
       ],
       "request": {
         "method": "PATCH",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
         "url": "{{baseUrl}}/pedidos/999/status",
-        "body": { "mode": "raw", "raw": "{\n  \"status\": \"cancelado\"\n}" }
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"cancelado\"\n}"
+        }
+      }
+    },
+    {
+      "name": "09 - Excluir pedido (204)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 204', () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/pedidos/{{pedidoId}}"
+      }
+    },
+    {
+      "name": "10 - Consultar pedido excluído (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/pedidos/{{pedidoId}}"
+      }
+    },
+    {
+      "name": "11 - Excluir pedido inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/pedidos/999"
       }
     }
   ]
