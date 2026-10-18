@@ -1,12 +1,31 @@
 {
   "info": {
     "name": "API de Gerenciamento de Pedidos",
+    "description": "Execute na ordem (Run collection). O pedido criado na requisição 01 é usado nas seguintes pela variável {{pedidoId}}.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "variable": [{ "key": "baseUrl", "value": "http://localhost:3000" }],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "pedidoId", "value": "1" }
+  ],
   "item": [
     {
       "name": "01 - Criar pedido (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 201', () => pm.response.to.have.status(201));",
+              "const pedido = pm.response.json();",
+              "pm.test('Status inicial é recebido', () => pm.expect(pedido.status).to.eql('recebido'));",
+              "pm.test('Retorna id numérico', () => pm.expect(pedido.id).to.be.a('number'));",
+              "pm.collectionVariables.set('pedidoId', pedido.id);"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -19,6 +38,20 @@
     },
     {
       "name": "02 - Criar pedido inválido (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', () => pm.response.to.have.status(400));",
+              "const corpo = pm.response.json();",
+              "pm.test('Mensagem de erro presente', () => pm.expect(corpo.erro).to.be.a('string'));",
+              "pm.test('Lista os 3 problemas', () => pm.expect(corpo.detalhes).to.have.lengthOf(3));"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
@@ -31,32 +64,112 @@
     },
     {
       "name": "03 - Listar pedidos (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Retorna uma lista', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]
+          }
+        }
+      ],
       "request": { "method": "GET", "url": "{{baseUrl}}/pedidos" }
     },
     {
       "name": "04 - Consultar pedido inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', () => pm.response.to.have.status(404));",
+              "pm.test('Mensagem de erro presente', () => pm.expect(pm.response.json().erro).to.include('não encontrado'));"
+            ]
+          }
+        }
+      ],
       "request": { "method": "GET", "url": "{{baseUrl}}/pedidos/999" }
     },
     {
       "name": "05 - Atualizar status (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Status atualizado', () => pm.expect(pm.response.json().status).to.eql('em_preparacao'));"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "PATCH",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": "{{baseUrl}}/pedidos/1/status",
+        "url": "{{baseUrl}}/pedidos/{{pedidoId}}/status",
         "body": { "mode": "raw", "raw": "{\n  \"status\": \"em_preparacao\"\n}" }
       }
     },
     {
-      "name": "Consultar pedido existente (200)",
-      "request": { "method": "GET", "url": "{{baseUrl}}/pedidos/1" }
+      "name": "06 - Consultar pedido existente (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('É o pedido criado', () => pm.expect(pm.response.json().id).to.eql(Number(pm.collectionVariables.get('pedidoId'))));"
+            ]
+          }
+        }
+      ],
+      "request": { "method": "GET", "url": "{{baseUrl}}/pedidos/{{pedidoId}}" }
     },
     {
-      "name": "Transição inválida (400)",
+      "name": "07 - Transição inválida (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 400', () => pm.response.to.have.status(400));",
+              "pm.test('Explica a transição', () => pm.expect(pm.response.json().erro).to.include('não é permitida'));"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "PATCH",
         "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "url": "{{baseUrl}}/pedidos/1/status",
+        "url": "{{baseUrl}}/pedidos/{{pedidoId}}/status",
         "body": { "mode": "raw", "raw": "{\n  \"status\": \"recebido\"\n}" }
+      }
+    },
+    {
+      "name": "08 - Atualizar status de pedido inexistente (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/pedidos/999/status",
+        "body": { "mode": "raw", "raw": "{\n  \"status\": \"cancelado\"\n}" }
       }
     }
   ]
