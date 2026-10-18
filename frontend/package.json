@@ -1,0 +1,9 @@
+{
+  "name": "api-gerenciamento-pedidos-frontend",
+  "version": "1.0.0",
+  "description": "Interface web para a API de Gerenciamento de Pedidos",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "api-gerenciamento-pedidos-backend",
+  "version": "1.0.0",
+  "description": "API REST de gerenciamento de pedidos (Node.js + Express)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "jest --verbose"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}

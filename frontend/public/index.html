@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gerenciamento de Pedidos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Gerenciamento de Pedidos</h1>
+    <span id="status-api" class="status-api">verificando API…</span>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Novo pedido</h2>
+      <form id="form-pedido" novalidate>
+        <label>Cliente
+          <input name="cliente" type="text" placeholder="Ex.: Carlos Silva">
+        </label>
+        <label>Valor (R$)
+          <input name="valor" type="number" step="0.01" min="0" placeholder="350">
+        </label>
+        <label>Tipo
+          <select name="tipo">
+            <option value="entrega">Entrega</option>
+            <option value="retirada">Retirada</option>
+          </select>
+        </label>
+        <label>Prioridade
+          <select name="prioridade">
+            <option value="baixa">Baixa</option>
+            <option value="normal" selected>Normal</option>
+            <option value="alta">Alta</option>
+          </select>
+        </label>
+        <button type="submit">Cadastrar</button>
+      </form>
+      <div id="mensagem" class="mensagem" hidden></div>
+    </section>
+
+    <section class="card">
+      <div class="titulo-lista">
+        <h2>Pedidos</h2>
+        <form id="form-busca" class="busca">
+          <input name="id" type="number" min="1" placeholder="Buscar por ID">
+          <button type="submit">Buscar</button>
+          <button type="button" id="btn-todos" class="secundario">Todos</button>
+        </form>
+      </div>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th><th>Cliente</th><th>Tipo</th><th>Valor</th>
+              <th>Prioridade</th><th>Status</th><th>Alterar status</th>
+            </tr>
+          </thead>
+          <tbody id="lista-pedidos"></tbody>
+        </table>
+      </div>
+      <p id="vazio" class="vazio" hidden>Nenhum pedido cadastrado.</p>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

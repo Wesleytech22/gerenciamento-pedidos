@@ -1,0 +1,10 @@
+Coloque aqui as capturas do Postman (método, URL, corpo, resposta e código HTTP visíveis):
+
+01-criacao.png               POST /pedidos válido -> 201
+02-validacao.png             POST /pedidos inválido -> 400
+03-listagem.png              GET /pedidos -> 200
+04-consulta-inexistente.png  GET /pedidos/999 -> 404
+05-atualizacao.png           PATCH /pedidos/1/status -> 200
+
+A coleção pronta está em backend/postman/API_Pedidos.postman_collection.json.
+Apague este arquivo depois de adicionar os prints.
