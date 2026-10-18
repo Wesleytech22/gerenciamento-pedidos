@@ -52,6 +52,12 @@ describe('POST /pedidos', () => {
     expect(res.body.detalhes).toHaveLength(4);
   });
 
+  test('rejeita corpo que não é objeto (400)', async () => {
+    const res = await criarPedido([pedidoValido]);
+    expect(res.status).toBe(400);
+    expect(res.body.erro).toMatch(/objeto JSON/);
+  });
+
   test('rejeita JSON malformado (400)', async () => {
     const res = await request(app)
       .post('/pedidos')
@@ -145,6 +151,14 @@ describe('PATCH /pedidos/:id/status', () => {
   test('retorna 404 para id inexistente', async () => {
     const res = await request(app).patch('/pedidos/999/status').send({ status: 'cancelado' });
     expect(res.status).toBe(404);
+  });
+});
+
+describe('GET /', () => {
+  test('informa que a API está no ar (200)', async () => {
+    const res = await request(app).get('/');
+    expect(res.status).toBe(200);
+    expect(res.body.rotas).toContain('/pedidos');
   });
 });
 

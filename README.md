@@ -82,7 +82,8 @@ O frontend não tem dependências. O endereço da API que ele usa fica em `front
 
 ```bash
 cd backend
-npm test
+npm test                # executa os testes
+npm run test:coverage   # executa e mostra a cobertura do código
 ```
 
 ## Rotas
@@ -209,7 +210,7 @@ Os dados ficam em memória: ao reiniciar o backend, os pedidos são apagados e o
 
 ## Testes
 
-- **Automatizados:** `backend/tests/`, com Jest e Supertest (31 casos). Cobrem criação válida e inválida (cliente vazio, valor zero/negativo/texto, tipo e prioridade desconhecidos, JSON malformado), listagem, consulta existente e inexistente, fluxo completo de status, transições proibidas, 404 no PATCH e erro inesperado retornando 500.
+- **Automatizados:** `backend/tests/`, com Jest e Supertest (33 casos). Cobrem criação válida e inválida (cliente vazio, valor zero/negativo/texto, tipo e prioridade desconhecidos, corpo que não é objeto, JSON malformado), listagem, consulta existente e inexistente, fluxo completo de status, transições proibidas, 404 no PATCH e erro inesperado retornando 500.
 - **Manuais:** coleção do Postman em `backend/postman/API_Pedidos.postman_collection.json` (Postman → Import). São 8 requisições com testes embutidos (aba *Test Results*), que conferem o código HTTP e o corpo de cada resposta. A requisição 01 guarda o id do pedido criado na variável `{{pedidoId}}`, usada pelas seguintes. Para rodar todas de uma vez: botão direito na coleção → *Run collection*.
 
 ## Evidências
