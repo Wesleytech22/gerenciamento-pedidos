@@ -234,17 +234,7 @@ Os dados ficam em memória: ao reiniciar o backend, os pedidos são apagados e o
 | `evidencias/04-consulta-inexistente.png` | GET de id inexistente — 404 |
 | `evidencias/05-atualizacao.png`          | PATCH de status válido — 200 |
 
-## Uso de IA
 
-Utilizamos o assistente Claude (Anthropic) como apoio para:
-
-- gerar a estrutura inicial do backend em camadas e do frontend;
-- escrever os testes automatizados;
-- redigir o README e a documentação em PDF.
-
-Todo o código foi revisado, executado e testado pelo grupo.
-
-Sugestões avaliadas:
 
 - **Aceita:** retornar `400` quando o JSON é malformado, em vez de deixar cair no `500`. Justificativa: é um erro de quem envia a requisição, não do servidor, como pede o item 5 do enunciado.
 - **Aceita:** recusar `valor` enviado como texto (`"350"`). Justificativa: o enunciado exige valor numérico; converter automaticamente esconderia erros do cliente da API.
