@@ -50,6 +50,7 @@ input, select, button { font: inherit; padding: 8px 10px; border-radius: 6px; bo
 button { background: var(--primaria); color: #fff; border-color: var(--primaria); cursor: pointer; }
 button:hover { filter: brightness(1.1); }
 button.secundario { background: #fff; color: var(--primaria); }
+button.perigo { background: #fff; color: var(--erro); border-color: var(--erro); padding: 4px 10px; }
 button:disabled { opacity: .5; cursor: not-allowed; }
 
 .mensagem { margin-top: 14px; padding: 10px 14px; border-radius: 6px; font-size: .9rem; }

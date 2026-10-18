@@ -99,6 +99,14 @@ function linhaPedido(pedido) {
     tdAcoes.appendChild(div);
   }
   tr.appendChild(tdAcoes);
+
+  const tdExcluir = document.createElement('td');
+  const btnExcluir = document.createElement('button');
+  btnExcluir.className = 'perigo';
+  btnExcluir.textContent = 'Excluir';
+  btnExcluir.addEventListener('click', () => excluirPedido(pedido, btnExcluir));
+  tdExcluir.appendChild(btnExcluir);
+  tr.appendChild(tdExcluir);
   return tr;
 }
 
@@ -130,6 +138,19 @@ async function atualizarStatus(id, status, botao) {
       body: JSON.stringify({ status }),
     });
     mostrarMensagem('sucesso', `Pedido #${id} atualizado para "${ROTULOS[status]}".`);
+    await carregarPedidos();
+  } catch (erro) {
+    mostrarMensagem('erro', erro.message, erro.detalhes);
+    botao.disabled = false;
+  }
+}
+
+async function excluirPedido(pedido, botao) {
+  if (!confirm(`Excluir o pedido #${pedido.id} de ${pedido.cliente}?`)) return;
+  botao.disabled = true;
+  try {
+    await requisitar(`/pedidos/${pedido.id}`, { method: 'DELETE' });
+    mostrarMensagem('sucesso', `Pedido #${pedido.id} excluído.`);
     await carregarPedidos();
   } catch (erro) {
     mostrarMensagem('erro', erro.message, erro.detalhes);

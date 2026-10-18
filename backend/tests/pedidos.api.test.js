@@ -154,6 +154,37 @@ describe('PATCH /pedidos/:id/status', () => {
   });
 });
 
+describe('DELETE /pedidos/:id', () => {
+  test('remove pedido existente (204)', async () => {
+    await criarPedido();
+    const res = await request(app).delete('/pedidos/1');
+    expect(res.status).toBe(204);
+    expect(res.body).toEqual({});
+
+    const consulta = await request(app).get('/pedidos/1');
+    expect(consulta.status).toBe(404);
+  });
+
+  test('não reutiliza o id de um pedido removido', async () => {
+    await criarPedido();
+    await request(app).delete('/pedidos/1');
+    const res = await criarPedido();
+    expect(res.body.id).toBe(2);
+  });
+
+  test('retorna 404 para id inexistente', async () => {
+    const res = await request(app).delete('/pedidos/999');
+    expect(res.status).toBe(404);
+  });
+
+  test('retorna 404 ao remover o mesmo pedido duas vezes', async () => {
+    await criarPedido();
+    await request(app).delete('/pedidos/1');
+    const res = await request(app).delete('/pedidos/1');
+    expect(res.status).toBe(404);
+  });
+});
+
 describe('GET /', () => {
   test('informa que a API está no ar (200)', async () => {
     const res = await request(app).get('/');

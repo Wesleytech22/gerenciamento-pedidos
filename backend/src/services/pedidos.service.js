@@ -36,4 +36,9 @@ function atualizarStatus(idParam, novoStatus) {
   return repository.atualizar(pedido.id, { status: novoStatus });
 }
 
-module.exports = { criar, listar, buscarPorId, atualizarStatus };
+function remover(idParam) {
+  const pedido = buscarPorId(idParam);
+  repository.remover(pedido.id);
+}
+
+module.exports = { criar, listar, buscarPorId, atualizarStatus, remover };

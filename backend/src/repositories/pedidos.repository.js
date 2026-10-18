@@ -26,10 +26,17 @@ function atualizar(id, campos) {
   return { ...pedido };
 }
 
+function remover(id) {
+  const indice = pedidos.findIndex((p) => p.id === id);
+  if (indice === -1) return false;
+  pedidos.splice(indice, 1);
+  return true;
+}
+
 // Usado apenas pelos testes para começar cada caso com a "base" vazia.
 function limpar() {
   pedidos = [];
   proximoId = 1;
 }
 
-module.exports = { inserir, listar, buscarPorId, atualizar, limpar };
+module.exports = { inserir, listar, buscarPorId, atualizar, remover, limpar };

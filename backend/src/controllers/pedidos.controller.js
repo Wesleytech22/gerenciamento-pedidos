@@ -23,4 +23,9 @@ function atualizarStatus(req, res) {
   res.status(200).json(pedido);
 }
 
-module.exports = { criar, listar, buscarPorId, atualizarStatus };
+function remover(req, res) {
+  service.remover(req.params.id);
+  res.status(204).end();
+}
+
+module.exports = { criar, listar, buscarPorId, atualizarStatus, remover };
